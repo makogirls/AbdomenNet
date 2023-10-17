@@ -98,4 +98,77 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
       return (augmented_images, labels)
     ```
   
-- **Data Augmentation:**
+- **Model Architecture:**
+  - A pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task.
+  ```python
+  def build_model(warmup_steps, decay_steps):
+    # Define Input
+    inputs = keras.Input(shape=config.IMAGE_SIZE + [3,], batch_size=config.BATCH_SIZE)
+
+    # Define Backbone
+    # Use EfficientNetB5 as the backbone
+    backbone = keras_efficientnet.EfficientNetB5(include_top=False, input_tensor=inputs, weights='imagenet')
+    x = backbone.output
+
+    # GAP to get the activation maps
+    gap = keras.layers.GlobalAveragePooling2D()
+    x = gap(x)
+
+    # Define 'necks' for each head
+    x_bowel = keras.layers.Dense(32, activation='silu')(x)
+    x_extra = keras.layers.Dense(32, activation='silu')(x)
+    x_liver = keras.layers.Dense(32, activation='silu')(x)
+    x_kidney = keras.layers.Dense(32, activation='silu')(x)
+    x_spleen = keras.layers.Dense(32, activation='silu')(x)
+
+    # Define heads
+    out_bowel = keras.layers.Dense(1, name='bowel', activation='sigmoid')(x_bowel) # use sigmoid to convert predictions to [0-1]
+    out_extra = keras.layers.Dense(1, name='extra', activation='sigmoid')(x_extra) # use sigmoid to convert predictions to [0-1]
+    out_liver = keras.layers.Dense(3, name='liver', activation='softmax')(x_liver) # use softmax for the liver head
+    out_kidney = keras.layers.Dense(3, name='kidney', activation='softmax')(x_kidney) # use softmax for the kidney head
+    out_spleen = keras.layers.Dense(3, name='spleen', activation='softmax')(x_spleen) # use softmax for the spleen head
+
+    # Concatenate the outputs
+    outputs = [out_bowel, out_extra, out_liver, out_kidney, out_spleen]
+
+    # Create model
+    print("[INFO] Building the model...")
+    model = keras.Model(inputs=inputs, outputs=outputs)
+
+    # Cosine Decay
+    cosine_decay = keras.optimizers.schedules.CosineDecay(
+        initial_learning_rate=1e-4,
+        decay_steps=decay_steps,
+        alpha=0.0,
+        warmup_target=1e-3,
+        warmup_steps=warmup_steps,
+    )
+
+    # Compile the model
+    optimizer = keras.optimizers.Adam(learning_rate=cosine_decay)
+    loss = {
+        "bowel": keras.losses.BinaryCrossentropy(),
+        "extra": keras.losses.BinaryCrossentropy(),
+        "liver": keras.losses.CategoricalCrossentropy(),
+        "kidney": keras.losses.CategoricalCrossentropy(),
+        "spleen": keras.losses.CategoricalCrossentropy(),
+    }
+    metrics = {
+        "bowel": ["accuracy"],
+        "extra": ["accuracy"],
+        "liver": ["accuracy"],
+        "kidney": ["accuracy"],
+        "spleen": ["accuracy"],
+    }
+    print("[INFO] Compiling the model...")
+    model.compile(
+        optimizer=optimizer,
+        loss=loss,
+        metrics=metrics
+    )
+
+    return model
+  ```
+
+
+### Inference

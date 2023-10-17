@@ -97,7 +97,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
       return (augmented_images, labels)
     ```
   
-- **Model Architecture: A pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task**
+- **Model Architecture 1: 1 pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task, predicting all 5 labels**
   ```python
   def build_model(warmup_steps, decay_steps):
     # Define Input
@@ -168,5 +168,6 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     return model
   ```
 
+- **Model Architecture 2: 5 pre-trained EfficientNet B3-5 models, with additional layers tailored for this specific task, predicting 1 label per model**
 
 ### Inference

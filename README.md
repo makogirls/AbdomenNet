@@ -1,10 +1,9 @@
-# AbdomenNet
-## Kaggle RSNA 2023 Abdominal Trauma Detection
+# Kaggle RSNA 2023 Abdominal Trauma Detection
 
-The AbdomenNet is designed to detect several potential injuries in CT scans of trauma patients from the Kaggle RSNA 2023 Abdominal Trauma Detection dataset. Rapid diagnosis is crucial, as any of these injuries can be fatal in a short time frame if untreated.
+This model is designed to detect several potential injuries in CT scans of trauma patients from the Kaggle RSNA 2023 Abdominal Trauma Detection dataset. Rapid diagnosis is crucial, as any of these injuries can be fatal in a short time frame if untreated.
 
 
-### Dataset Description
+## Dataset Description
 
 - `train.csv`: Target labels for the train set. Note that patients labeled healthy may still have other medical issues, such as cancer or broken bones, that don't happen to be covered by the competition labels.
   - `patient_id`: A unique ID code for each patient.
@@ -27,7 +26,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
 - `[train/test]_dicom_tags.parquet`: DICOM tags from every image, extracted with Pydicom. Provided for convenience.
 
 
-### Python Setup and Usage
+## Python Setup and Usage
 
 ```python
 !pip install pydicom
@@ -40,7 +39,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
 ```
 
 
-### CT Image Processing
+## CT Image Processing
 
 - **Loading, Resizing, and Saving DCM Images as PNG:**
   - Load specific slices from a DICOM file using pydicom.
@@ -52,7 +51,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
   ```
 
 
-### Training
+## Training
 
 - **Define the configuration:**
   ```python
@@ -122,7 +121,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
   - Save the model.
 
 
-### Inference
+## Inference
 - **Define the configuration for inference:**
   ```python
   class Config:

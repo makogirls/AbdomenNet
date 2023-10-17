@@ -97,7 +97,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
       return (augmented_images, labels)
     ```
   
-- **Model Architecture 1: 1 pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task, predicting all 5 labels**
+- **Model Architecture 1: One pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task, predicting all 5 labels**
   ```python
   def build_model(warmup_steps, decay_steps):
     # Define Input
@@ -168,6 +168,99 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     return model
   ```
 
-- **Model Architecture 2: 5 pre-trained EfficientNet B3-5 models, with additional layers tailored for this specific task, predicting 1 label per model**
+- **Model Architecture 2: Five pre-trained EfficientNet B3-5 models, with additional layers tailored for this specific task, predicting 1 label per model**
+  ```python
+  def build_binary_classification_model(warmup_steps, decay_steps, head_name):
+    # Define Input
+    inputs = keras.Input(shape=config.IMAGE_SIZE + [3,], batch_size=config.BATCH_SIZE)
+
+    # Define Backbone
+    backbone = keras_cv.models.EfficientNetV2Backbone.from_preset("efficientnetv2_b3")
+    backbone.include_rescaling = False
+    x = backbone(inputs)
+
+    # GAP to get the activation maps
+    gap = keras.layers.GlobalAveragePooling2D()
+    x = gap(x)
+
+    # Define 'necks' for the binary classification head
+    x_head = keras.layers.Dense(32, activation='silu')(x)
+
+    # Define binary classification head
+    output = keras.layers.Dense(1, name=head_name, activation='sigmoid')(x_head)
+
+    # Create model
+    print(f"[INFO] Building the {head_name} model...")
+    model = keras.Model(inputs=inputs, outputs=output)
+
+    # Cosine Decay
+    cosine_decay = keras.optimizers.schedules.CosineDecay(
+        initial_learning_rate=1e-4,
+        decay_steps=decay_steps,
+        alpha=0.0,
+        warmup_target=1e-3,
+        warmup_steps=warmup_steps,
+    )
+
+    # Compile the model
+    optimizer = keras.optimizers.Adam(learning_rate=cosine_decay)
+    loss = keras.losses.BinaryCrossentropy()
+    metrics = ["accuracy"]
+
+    print(f"[INFO] Compiling the {head_name} model...")
+    model.compile(
+        optimizer=optimizer,
+        loss=loss,
+        metrics=metrics
+    )
+
+    return model
+
+  def build_tertiary_classification_model(warmup_steps, decay_steps, head_name):
+    # Define Input
+    inputs = keras.Input(shape=config.IMAGE_SIZE + [3,], batch_size=config.BATCH_SIZE)
+
+    # Define Backbone
+    backbone = keras_cv.models.EfficientNetV2Backbone.from_preset("efficientnetv2_b3")
+    backbone.include_rescaling = False
+    x = backbone(inputs)
+
+    # GAP to get the activation maps
+    gap = keras.layers.GlobalAveragePooling2D()
+    x = gap(x)
+
+    # Define 'necks' for the tertiary classification head
+    x_head = keras.layers.Dense(32, activation='silu')(x)
+
+    # Define tertiary classification head
+    output = keras.layers.Dense(3, name=head_name, activation='softmax')(x_head)
+
+    # Create model
+    print(f"[INFO] Building the {head_name} model...")
+    model = keras.Model(inputs=inputs, outputs=output)
+
+    # Cosine Decay
+    cosine_decay = keras.optimizers.schedules.CosineDecay(
+        initial_learning_rate=1e-4,
+        decay_steps=decay_steps,
+        alpha=0.0,
+        warmup_target=1e-3,
+        warmup_steps=warmup_steps,
+    )
+
+    # Compile the model
+    optimizer = keras.optimizers.Adam(learning_rate=cosine_decay)
+    loss = keras.losses.CategoricalCrossentropy()
+    metrics = ["accuracy"]
+
+    print(f"[INFO] Compiling the {head_name} model...")
+    model.compile(
+        optimizer=optimizer,
+        loss=loss,
+        metrics=metrics
+    )
+
+    return model
+  ```
 
 ### Inference

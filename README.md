@@ -116,6 +116,11 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     - Utilizes Cosine Decay for the learning rate.
     - Uses Categorical Crossentropy as the loss function.
 
+- **Train models and save:**
+  - Define the model.
+  - Train with train dataset and validate with validation dataset for the number of epochs.
+  - Save the model.
+
 
 ### Inference
 - **Define the configuration for inference:**
@@ -130,3 +135,8 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
                    "kidney_high", "liver_healthy", "liver_low", "liver_high",
                    "spleen_healthy", "spleen_low", "spleen_high"]
   ```
+
+- **Load Pre-trained Models and Make Predictions:**
+  - Load the model.
+  - Predict the condition of the organ for each patient.
+  - Store predictions in a dataframe.

@@ -103,18 +103,18 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
   - Uses Binary Crossentropy for binary labels and Categorical Crossentropy for multi-class labels.
 
 - **Model Architecture 2: Single-output Model Architectures - Predicting 1 label per model using EfficientNet B3-5**
-  - **Binary Classification Model**
-  - Uses pretrained EfficientNetB3-5 as the backbone.
-  - Specifically designed for binary classification tasks.
-  - Employs Global Average Pooling after the backbone.
-  - Utilizes Cosine Decay for the learning rate.
-  - Uses Binary Crossentropy as the loss function.
-  - **Tertiary Classification Model**
-  - Uses pretrained EfficientNetB3-5 as the backbone.
-  - Specifically designed for 3-class classification tasks.
-  - Employs Global Average Pooling after the backbone.
-  - Utilizes Cosine Decay for the learning rate.
-  - Uses Categorical Crossentropy as the loss function.
+  - Binary Classification Model
+    - Uses pretrained EfficientNetB3-5 as the backbone.
+    - Specifically designed for binary classification tasks.
+    - Employs Global Average Pooling after the backbone.
+    - Utilizes Cosine Decay for the learning rate.
+    - Uses Binary Crossentropy as the loss function.
+  - Tertiary Classification Model
+    - Uses pretrained EfficientNetB3-5 as the backbone.
+    - Specifically designed for 3-class classification tasks.
+    - Employs Global Average Pooling after the backbone.
+    - Utilizes Cosine Decay for the learning rate.
+    - Uses Categorical Crossentropy as the loss function.
 
 
 ### Inference

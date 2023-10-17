@@ -31,6 +31,12 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
 
 ```python
 !pip install pydicom
+!pip install keras
+!pip install keras_cv
+!pip install keras_core
+!pip install tensorflow
+!pip install keras_efficientnet
+
 ```
 
 
@@ -46,3 +52,20 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
   ```
 
 
+### Training
+
+- **Define the configuration:**
+  ```python
+  class Config:
+    SEED = 42
+    IMAGE_SIZE = [256, 256]
+    BATCH_SIZE = 16 / 32 / 64
+    EPOCHS = 100 / 200
+    TARGET_COLS  = [
+        "bowel_injury", "extravasation_injury",
+        "kidney_healthy", "kidney_low", "kidney_high",
+        "liver_healthy", "liver_low", "liver_high",
+        "spleen_healthy", "spleen_low", "spleen_high",
+    ]
+    AUTOTUNE = tf.data.AUTOTUNE
+  ```

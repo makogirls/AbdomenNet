@@ -88,16 +88,13 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
           return inputs
   
   def apply_augmentation(images, labels):
-      # 이미지 증강 파이프라인을 정의
       augmenter = CustomAugmenter(cutout_params={"height_factor": 0.2, "width_factor": 0.2})
-  
-      # 이미지 증강을 적용
       augmented_images = augmenter(images, training=True)
   
       return (augmented_images, labels)
     ```
   
-- **Model Architecture 1: One pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task, predicting all 5 labels**
+- **Model Architecture 1: Multi-output Model Architecture - Predicting all 5 labels with a Single EfficientNet B3-5 Model**
   ```python
   def build_model(warmup_steps, decay_steps):
     # Define Input
@@ -168,7 +165,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     return model
   ```
 
-- **Model Architecture 2: Five pre-trained EfficientNet B3-5 models, with additional layers tailored for this specific task, predicting 1 label per model**
+- **Model Architecture 2: Single-output Model Architectures - Predicting 1 label per model using EfficientNet B3-5**
   ```python
   def build_binary_classification_model(warmup_steps, decay_steps, head_name):
     # Define Input

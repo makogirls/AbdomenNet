@@ -118,3 +118,4 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
 
 
 ### Inference
+- **Define the configuration for inference:**

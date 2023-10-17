@@ -59,8 +59,8 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
   class Config:
     SEED = 42
     IMAGE_SIZE = [256, 256]
-    BATCH_SIZE = 16 / 32 / 64
-    EPOCHS = 100 / 200
+    BATCH_SIZE = 16 or 32 or 64
+    EPOCHS = 100 or 200
     TARGET_COLS  = [
         "bowel_injury", "extravasation_injury",
         "kidney_healthy", "kidney_low", "kidney_high",

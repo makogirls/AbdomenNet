@@ -70,8 +70,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     AUTOTUNE = tf.data.AUTOTUNE
   ```
   
-- **Data Augmentation:**
-  - RandomCutout("height_factor": 0.2, "width_factor": 0.2), RandomFlip("horizontal"), RandomRotation(0.2)
+- **Data Augmentation: RandomCutout("height_factor": 0.2, "width_factor": 0.2), RandomFlip("horizontal"), RandomRotation(0.2)**
   ```python
   random_flip_layer = tf.keras.layers.experimental.preprocessing.RandomFlip("horizontal")
   random_rotation_layer = tf.keras.layers.experimental.preprocessing.RandomRotation(0.2)
@@ -98,8 +97,7 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
       return (augmented_images, labels)
     ```
   
-- **Model Architecture:**
-  - A pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task.
+- **Model Architecture: A pre-trained EfficientNet B3-5 model, with additional layers tailored for this specific task**
   ```python
   def build_model(warmup_steps, decay_steps):
     # Define Input

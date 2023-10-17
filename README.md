@@ -69,3 +69,33 @@ The AbdomenNet is designed to detect several potential injuries in CT scans of t
     ]
     AUTOTUNE = tf.data.AUTOTUNE
   ```
+  
+- **Data Augmentation:**
+  - RandomCutout("height_factor": 0.2, "width_factor": 0.2), RandomFlip("horizontal"), RandomRotation(0.2)
+  ```python
+  random_flip_layer = tf.keras.layers.experimental.preprocessing.RandomFlip("horizontal")
+  random_rotation_layer = tf.keras.layers.experimental.preprocessing.RandomRotation(0.2)
+
+  class CustomAugmenter(tf.keras.layers.Layer):
+      def __init__(self, cutout_params, **kwargs):
+          super(CustomAugmenter, self).__init__(**kwargs)
+          self.cutout_layer = keras_cv.layers.Augmenter([keras_cv.layers.RandomCutout(**cutout_params)])
+  
+      def call(self, inputs, training=None):
+          if training:
+              inputs = random_flip_layer(inputs)
+              inputs = random_rotation_layer(inputs)
+              inputs = self.cutout_layer(inputs)
+          return inputs
+  
+  def apply_augmentation(images, labels):
+      # 이미지 증강 파이프라인을 정의
+      augmenter = CustomAugmenter(cutout_params={"height_factor": 0.2, "width_factor": 0.2})
+  
+      # 이미지 증강을 적용
+      augmented_images = augmenter(images, training=True)
+  
+      return (augmented_images, labels)
+    ```
+  
+- **Data Augmentation:**

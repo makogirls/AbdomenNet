@@ -62,23 +62,10 @@ self.transform = Compose([
 
 - **Train models and save:**
   - Define the model.
+  - Loss function is defined as BCEWithLogitsLoss.
+  - Adam optimizer and learning rate scheduler are defined.
   - Train with train dataset and validate with validation dataset for the number of epochs.
   - Save the model.
-
-
-## Inference
-- **Define the configuration for inference:**
-  ```python
-  class Config:
-    IMAGE_SIZE = [256, 256]
-    RESIZE_DIM = 256
-    BATCH_SIZE = 16 or 32 or 64
-    AUTOTUNE = tf.data.AUTOTUNE
-    TARGET_COLS  = ["bowel_healthy", "bowel_injury", "extravasation_healthy",
-                   "extravasation_injury", "kidney_healthy", "kidney_low",
-                   "kidney_high", "liver_healthy", "liver_low", "liver_high",
-                   "spleen_healthy", "spleen_low", "spleen_high"]
-  ```
 
 - **Load Pre-trained Models and Make Predictions:**
   - Load the model.

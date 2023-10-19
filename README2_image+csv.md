@@ -55,27 +55,10 @@ self.transform = Compose([
 
 ## Training
   
-- **Model Architecture 1: Multi-output Model Architecture - Predicting all 5 labels with a Single EfficientNet B3-5 Model**
-  - Uses pretrained EfficientNetB3-5 as the backbone.
-  - Contains multiple 'necks' and 'heads' for each label.
-  - Employs Global Average Pooling after the backbone.
-  - Utilizes Cosine Decay for the learning rate.
-  - Different activation functions for binary (sigmoid) and multi-class (softmax) outputs.
-  - Uses Binary Crossentropy for binary labels and Categorical Crossentropy for multi-class labels.
-
-- **Model Architecture 2: Single-output Model Architectures - Predicting 1 label per model using EfficientNet B3-5**
-  - Binary Classification Model
-    - Uses pretrained EfficientNetB3-5 as the backbone.
-    - Specifically designed for binary classification tasks.
-    - Employs Global Average Pooling after the backbone.
-    - Utilizes Cosine Decay for the learning rate.
-    - Uses Binary Crossentropy as the loss function.
-  - Tertiary Classification Model
-    - Uses pretrained EfficientNetB3-5 as the backbone.
-    - Specifically designed for 3-class classification tasks.
-    - Employs Global Average Pooling after the backbone.
-    - Utilizes Cosine Decay for the learning rate.
-    - Uses Categorical Crossentropy as the loss function.
+- **Model Architecture: A modified ResNet50 architecture processing both image data and metadata**
+  - Uses pretrained Resnet50 for image processing
+  - Uses a fully connected layer for metadata processing
+  - Linear layer combines the image/metadata processing component leading to the final output
 
 - **Train models and save:**
   - Define the model.

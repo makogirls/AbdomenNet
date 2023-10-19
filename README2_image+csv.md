@@ -38,7 +38,7 @@ This model is designed to detect potential injuries in CT scans of trauma patien
 
 ## Dataset Processing
 
-- **Loading, Resizing, and Data Augmentation:**
+- **Loading, Resizing, and Data Augmentation**
   - Load specific slices from a DICOM file using pydicom.
   - Resize them to a size of (225,225)
   - Data Augmentation: ShiftScaleRotate, Horizontal/Vertical Flip
@@ -54,46 +54,6 @@ self.transform = Compose([
 
 
 ## Training
-
-- **Define the configuration:**
-  ```python
-  class Config:
-    SEED = 42
-    IMAGE_SIZE = [256, 256]
-    BATCH_SIZE = 16 or 32 or 64
-    EPOCHS = 100 or 200
-    TARGET_COLS  = [
-        "bowel_injury", "extravasation_injury",
-        "kidney_healthy", "kidney_low", "kidney_high",
-        "liver_healthy", "liver_low", "liver_high",
-        "spleen_healthy", "spleen_low", "spleen_high",
-    ]
-    AUTOTUNE = tf.data.AUTOTUNE
-  ```
-  
-- **Data Augmentation: RandomCutout, RandomFlip, RandomRotation**
-  ```python
-  random_flip_layer = tf.keras.layers.experimental.preprocessing.RandomFlip("horizontal")
-  random_rotation_layer = tf.keras.layers.experimental.preprocessing.RandomRotation(0.2)
-
-  class CustomAugmenter(tf.keras.layers.Layer):
-      def __init__(self, cutout_params, **kwargs):
-          super(CustomAugmenter, self).__init__(**kwargs)
-          self.cutout_layer = keras_cv.layers.Augmenter([keras_cv.layers.RandomCutout(**cutout_params)])
-  
-      def call(self, inputs, training=None):
-          if training:
-              inputs = random_flip_layer(inputs)
-              inputs = random_rotation_layer(inputs)
-              inputs = self.cutout_layer(inputs)
-          return inputs
-  
-  def apply_augmentation(images, labels):
-      augmenter = CustomAugmenter(cutout_params={"height_factor": 0.2, "width_factor": 0.2})
-      augmented_images = augmenter(images, training=True)
-  
-      return (augmented_images, labels)
-    ```
   
 - **Model Architecture 1: Multi-output Model Architecture - Predicting all 5 labels with a Single EfficientNet B3-5 Model**
   - Uses pretrained EfficientNetB3-5 as the backbone.

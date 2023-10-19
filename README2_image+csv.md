@@ -36,16 +36,21 @@ This model is designed to detect potential injuries in CT scans of trauma patien
 ```
 
 
-## CT Image Processing
+## Dataset Processing
 
-- **Loading, Resizing, and Saving DCM Images as PNG:**
+- **Loading, Resizing, and Data Augmentation:**
   - Load specific slices from a DICOM file using pydicom.
-  - Resize them to a size of (256,256)
-  - Save them either as original PNG files or normalized PNG files.
-- **Normalization Technique:** The normalization was performed using the following formula for each pixel in an image:
-  ```python
-  normalized_pixel = (original_pixel - np.min(image)) / (np.max(image) - np.min(image))
-  ```
+  - Resize them to a size of (225,225)
+  - Data Augmentation: ShiftScaleRotate, Horizontal/Vertical Flip
+```python
+self.transform = Compose([
+              Resize(height=225, width=225),
+              ShiftScaleRotate(rotate_limit=90, scale_limit=[0.8, 1.2]),
+              HorizontalFlip(p=self.horizontal_flip),
+              VerticalFlip(p=self.vertical_flip),
+              ToTensorV2()
+          ])
+```
 
 
 ## Training

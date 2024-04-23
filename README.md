@@ -24,11 +24,6 @@ This model is designed to detect several potential injuries in CT scans of traum
   - `injury_name`: The type of injury visible in the frame.
 - `segmentations/`: Model-generated pixel-level annotations of the relevant organs and some major bones for a subset of the scans in the training set. This data is provided in the nifti file format. The filenames are series IDs. Note that the NIFTI files and DICOM files are not in the same orientation. Use the NIFTI header information along with DICOM metadata to determine the appropriate orientation.
 - `[train/test]_dicom_tags.parquet`: DICOM tags from every image, extracted with Pydicom. Provided for convenience.
-## External Dataset
-The following link: [RSNA-ATD 512x512 PNG v2 Dataset](https://www.kaggle.com/datasets/awsaf49/rsna-atd-512x512-png-v2-dataset)
-
-This dataset contains additional high-resolution medical images in PNG format, which significantly contributed to improving the performance of machine learning model during the competition.
-
 
 
 ## Python Setup and Usage
